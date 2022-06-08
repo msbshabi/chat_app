@@ -47,6 +47,7 @@
                     <h4 class="mb-4">
                         Welcome, {{ user.profile.full_name }}
                     </h4>
+                    <input type="hidden" id="send-by-user" value="{{ user.id }}" />
                     <div class="search-box chat-search-box">
                         <div class="input-group mb-3 rounded-3">
                             <span class="input-group-text text-muted bg-light pe-1 ps-3" id="basic-addon1">
@@ -302,6 +303,8 @@
                                     <div class="flex-grow-1 overflow-hidden">
                                         <h5 class="font-size-16 mb-0 text-truncate">
                                             <a href="#" class="text-reset user-profile-show">Doris Brown</a>
+                                            <input type="hidden" id="send-to-user" value={% if user.id == 1 %} "3"
+                                                {% else %} "1" {% endif %} />
                                             <i
                                                 class="ri-record-circle-fill font-size-10 text-success d-inline-block ms-1"></i>
                                         </h5>
@@ -384,10 +387,13 @@
                             </div>
                             <div class="simplebar-mask">
                                 <div class="simplebar-offset" style="right: -17px; bottom: 0px">
-                                    <div class="simplebar-content-wrapper"
+                                    <div id="chat-container" class="simplebar-content-wrapper"
                                         style="height: 100%;overflow: hidden scroll;">
                                         <div class="simplebar-content" style="padding: 24px">
-                                            <ul class="list-unstyled mb-0">
+                                            <ul class="list-unstyled mb-0" id="chat-body">
+
+                                                {% for a in ChatUsers %}
+                                                {% for a in ChatUsers %}
                                                 <li>
                                                     <div class="conversation-list">
                                                         <div class="chat-avatar">
@@ -491,6 +497,8 @@
                                                         </div>
                                                     </div>
                                                 </li>
+                                                {% endfor %}
+                                                {% endfor %}
 
                                                 {% comment %}
                                                 <li>
@@ -525,7 +533,7 @@
                             <div class="row g-0">
                                 <div class="col">
                                     <input type="text" class="form-control form-control-lg bg-light border-light"
-                                        placeholder="Enter Message..." />
+                                        placeholder="Enter Message..." id="message-input" />
                                 </div>
                                 <div class="col-auto">
                                     <div class="chat-input-links ms-md-2 me-md-0">
@@ -587,6 +595,7 @@
                     </div>
                     <!-- End profile user -->
 
+                    {% comment %}
                     <!-- Start user-profile-desc -->
                     <div class="p-4 user-profile-desc" data-simplebar="init">
                         <div class="simplebar-wrapper" style="margin: -24px">
@@ -910,6 +919,8 @@
                         </div>
                     </div>
                     <!-- end User profile detail sidebar -->
+                    {% endcomment %}
+
                 </div>
             </div>
             <!-- End User chat -->
@@ -1014,6 +1025,7 @@
         <script src="{% static 'js/index.init.js' %}"></script>
 
         <script src="{% static 'js/app.js' %}"></script>
+        <script src="{% static 'js/chat.js' %}"></script>
     </div>
 </body>
 
