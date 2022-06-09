@@ -37,7 +37,9 @@ class ChatConsumer(AsyncConsumer):
             print("########## Error:: Invalid arguments")
             return False
 
-        send_by_user = self.scope['user']
+        # send_by_user = self.scope['user']
+        send_by_user = await self.get_user_object(self.scope['user'].id)
+
         # print("#################### ..", send_by_id,  send_by_user.id, (send_by_id == send_by_user.id), (send_by_id != send_by_user.id), not (send_by_id == send_by_user.id))
 
         # if (not (send_by_id == send_by_user.id)):
@@ -54,8 +56,8 @@ class ChatConsumer(AsyncConsumer):
 
         response = {
             'message': message,
-            'send_to': send_to_user.id,
-            'send_by': send_by_user.id
+            'send_to': {'user_id': send_to_user.id, 'name': send_to_user.profile.full_name, 'avatar': send_to_user.profile.avatar_url},
+            'send_by': {'user_id': send_by_user.id, 'name': send_by_user.profile.full_name, 'avatar': send_by_user.profile.avatar_url}
         }
 
         await self.channel_layer.group_send(
@@ -92,7 +94,7 @@ class ChatConsumer(AsyncConsumer):
 
     @database_sync_to_async
     def get_user_object(self, user_id):
-        qs = User.objects.filter(id=user_id)
+        qs = User.objects.prefetch_related('profile').filter(id=user_id)
         if qs.exists():
             obj = qs.first()
         else:
