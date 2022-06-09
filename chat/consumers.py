@@ -2,6 +2,8 @@ import json
 from channels.consumer import AsyncConsumer
 from channels.db import database_sync_to_async
 from django.contrib.auth import get_user_model
+from chat.models import Thread
+from chat.models import ChatMessage
 
 User = get_user_model()
 
@@ -32,6 +34,7 @@ class ChatConsumer(AsyncConsumer):
         message = received_data.get('message')
         send_to_id = received_data.get('send_to')
         send_by_id = received_data.get('send_by')
+        thread_id = received_data.get('chat_id')
 
         if (not message) or (not send_to_id) or (not send_by_id):
             print("########## Error:: Invalid arguments")
@@ -52,11 +55,19 @@ class ChatConsumer(AsyncConsumer):
             print("########## Error:: Send to user not found!")
             return False
 
+        thread = await self.get_thread_object(thread_id)
+
+        if (not send_to_user):
+            print("########## Error:: Invalid chat id!")
+            return False
+
+        await self.create_chat_message(thread, send_by_user, message)
+
         send_to_chat_room = f'user_chat_room_{send_to_id}'
 
         response = {
             'message': message,
-            'send_to': {'user_id': send_to_user.id, 'name': send_to_user.profile.full_name, 'avatar': send_to_user.profile.avatar_url},
+            'chat_id': thread_id,
             'send_by': {'user_id': send_by_user.id, 'name': send_by_user.profile.full_name, 'avatar': send_by_user.profile.avatar_url}
         }
 
@@ -75,11 +86,6 @@ class ChatConsumer(AsyncConsumer):
                 'text': json.dumps(response)
             }
         )
-
-        # await self.send({
-        #     'type': 'websocket.send',
-        #     'text': json.dumps(response)
-        # })
 
     async def chat_message(self, event):
         print("########## Chat message ..", event)
@@ -100,3 +106,16 @@ class ChatConsumer(AsyncConsumer):
         else:
             obj = None
         return obj
+
+    @database_sync_to_async
+    def get_thread_object(self, thread_id):
+        qs = Thread.objects.filter(id=thread_id)
+        if qs.exists():
+            obj = qs.first()
+        else:
+            obj = None
+        return obj
+
+    @database_sync_to_async
+    def create_chat_message(self, thread, user, message):
+        ChatMessage.objects.create(thread=thread, user=user, message=message)

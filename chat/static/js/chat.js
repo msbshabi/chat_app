@@ -3,30 +3,37 @@ let wsStart = url.protocol === "https" ? "wss://" : "ws://";
 let endpoint = wsStart + url.host + url.pathname;
 var socket = new WebSocket(endpoint);
 
-let message_input = $("#message-input");
-let chat_body = $("#chat-body");
-let send_message_form = $("#send-message-form");
+let messageInput = $("#message-input");
+let sendMessageForm = $("#send-message-form");
+let userProfile = $("#user-profile");
 
-const USER_ID = $("#send-by-user").val();
-const SEND_TO_USER = $("#send-to-user").val();
+const SEND_BY_USER = $("#send-by-user").val();
 
 $(document).ready(function () {
-    const chatBox = document.getElementById("chat-container");
+    let liElement = $(".chat-user-list li.active");
+    let chatId = liElement.attr("chat-id");
+    const chatBox = document.getElementById(`chat-container-${chatId}`);
     chatBox.scrollTop = chatBox.scrollHeight;
+
+    setUserProfile(liElement);
 });
 
 socket.onopen = async function (e) {
     console.log("WebSocket open", e);
-    send_message_form.on("submit", function (e) {
+
+    sendMessageForm.on("submit", function (e) {
+        let chatId = $(".chat-user-list li.active").attr("chat-id");
         e.preventDefault();
-        let message = message_input.val();
+        let message = messageInput.val();
+        let sendToUser = $("#send-to-user").val();
+
         let data = JSON.stringify({
             message: message,
-            send_to: SEND_TO_USER,
-            send_by: USER_ID,
+            send_to: sendToUser,
+            send_by: SEND_BY_USER,
+            chat_id: chatId,
         });
 
-        // console.log(data);
         socket.send(data);
     });
 };
@@ -47,34 +54,23 @@ socket.onclose = async function (e) {
 };
 
 function newMessage(data) {
-    console.log(data);
-
     let message = data["message"];
+    let sendBy = data["send_by"];
+    let chatId = data["chat_id"];
 
     if ($.trim(message) === "") {
         return false;
     }
 
-    let send_by = data["send_by"];
-    let send_to = data["send_to"];
+    let messageElement =
+        sendBy["user_id"] == SEND_BY_USER
+            ? getChatElement(message, sendBy)
+            : getChatElement(message, sendBy, false);
 
-    // let message_element = getChatElement(
-    //     message,
-    //     send_by,
-    //     send_to,
-    //     send_by["user_id"] == USER_ID
-    // );
-
-    // console.log(send_by["user_id"] == USER_ID, send_by["user_id"], USER_ID);
-
-    let message_element =
-        send_by["user_id"] == USER_ID
-            ? getChatElement(message, send_by)
-            : getChatElement(message, send_by,false);
-
-    chat_body.append($(message_element));
-    scrollToChatBottom();
-    message_input.val(null);
+    // let chatBody = $(`#chat-body${chatId}`);
+    $(`#chat-body-${chatId}`).append($(messageElement));
+    scrollToChatBottom(chatId);
+    messageInput.val(null);
 }
 
 function getChatElement(message, user, rightElement = true) {
@@ -127,8 +123,48 @@ function getChatElement(message, user, rightElement = true) {
     </li>`;
 }
 
-function scrollToChatBottom() {
-    $("#chat-container")
+function scrollToChatBottom(chatId) {
+    $(`#chat-container-${chatId}`)
         .stop()
-        .animate({ scrollTop: $("#chat-container")[0].scrollHeight }, 2000);
+        .animate(
+            { scrollTop: $(`#chat-container-${chatId}`)[0].scrollHeight },
+            2000
+        );
 }
+
+$(".chat-user-list li").click(function () {
+    // console.log("clicked chat");
+    $(".user-chat").addClass("user-chat-show");
+
+    $(".chat-user-list li").removeClass("active");
+    $(this).addClass("active");
+
+    let chatId = $(this).attr("chat-id");
+    let chatUserId = $(this).attr("user-id");
+
+    $(".chat-window").addClass("d-none");
+    $(`#chat-${chatId}`).removeClass("d-none");
+    $("#send-to-user").val(chatUserId);
+
+    setUserProfile($(this));
+});
+
+function setUserProfile(liElement) {
+    userProfile.addClass("d-none");
+
+    let userName = liElement.attr("user-name");
+    let userAvatar = liElement.attr("user-avatar");
+    let userBio = liElement.attr("user-bio");
+
+    $(".user-profile-name").text(userName);
+    $(".user-profile-avatar").attr("src", userAvatar);
+    $(".user-profile-bio").text(userBio);
+}
+
+$("#user-profile-hide").click(function () {
+    userProfile.addClass("d-none");
+});
+
+$(".user-profile-show").click(function () {
+    userProfile.removeClass("d-none");
+});

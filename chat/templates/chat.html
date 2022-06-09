@@ -71,7 +71,7 @@
                                 {% for chat_user in ChatUsers %}
                                 <div class="owl-item active" style=" width: 71px; margin-right: 16px;">
                                     <div class="item">
-                                        <a href="#" class="user-status-box">
+                                        <a href="javascript: void(0);" class="user-status-box">
                                             <div class="avatar-xs mx-auto d-block chat-user-img online">
                                                 <img src="{{ chat_user.profile.avatar_url }}" alt="user-img"
                                                     class="img-fluid rounded-circle" />
@@ -89,7 +89,7 @@
                                 {% comment %}
                                 <div class="owl-item active" style="width: 71px; margin-right: 16px;">
                                     <div class="item">
-                                        <a href="#" class="user-status-box">
+                                        <a href="javascript: void(0);" class="user-status-box">
                                             <div class="avatar-xs mx-auto d-block chat-user-img online">
                                                 <img src="{% static 'img/avatar-4.jpg' %}" alt="user-img"
                                                     class="img-fluid rounded-circle" />
@@ -121,7 +121,6 @@
                 <!-- Start chat-message-list -->
                 <div>
                     <h5 class="mb-3 px-3 font-size-16">Recent</h5>
-
                     <div class="chat-message-list px-2" data-simplebar="init">
                         <div class="simplebar-wrapper" style="margin: 0px -8px">
                             <div class="simplebar-height-auto-observer-wrapper">
@@ -134,9 +133,40 @@
                                         <div class="simplebar-content" style="padding: 0px 8px">
                                             <ul class="list-unstyled chat-list chat-user-list">
 
+                                                {% for thread in Threads %}
+                                                <li class="{% if forloop.first %}active{% endif %}"
+                                                    chat-id="{{ thread.id }}"
+                                                    user-id="{% if thread.first_person == user %}{{ thread.second_person.id }}{% else %}{{ thread.first_person.id }}{% endif %}"
+                                                    user-name="{% if thread.first_person == user %}{{ thread.second_person.profile }}{% else %}{{ thread.first_person.profile }}{% endif %}"
+                                                    user-avatar="{% if thread.first_person == user %}{{ thread.second_person.profile.avatar_url }}{% else %}{{ thread.first_person.profile.avatar_url }}{% endif %}"
+                                                    user-bio="{% if thread.first_person == user %}{{ thread.second_person.profile.bio }}{% else %}{{ thread.first_person.profile.bio }}{% endif %}">
+                                                    <a href="javascript: void(0);">
+                                                        <div class="d-flex">
+                                                            <div
+                                                                class="chat-user-img online align-self-center me-3 ms-0">
+                                                                <img src="{% if thread.first_person == user %}{{ thread.second_person.profile.avatar_url }}{% else %}{{ thread.first_person.profile.avatar_url }}{% endif %}"
+                                                                    class="rounded-circle avatar-xs" alt="" />
+                                                                <span class="user-status"></span>
+                                                            </div>
+                                                            <div class="flex-grow-1 overflow-hidden">
+                                                                <h5 class="text-truncate font-size-15 mb-1">
+                                                                    {% if thread.first_person == user %}{{ thread.second_person.profile }}{% else %}{{ thread.first_person.profile }}{% endif %}
+                                                                </h5>
+                                                                <p class="chat-user-message text-truncate mb-0">
+                                                                    Nice to meet you
+                                                                </p>
+                                                            </div>
+                                                            <div class="font-size-11">
+                                                                10:12 AM
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                {% endfor %}
+
                                                 {% comment %}
                                                 <li>
-                                                    <a href="#">
+                                                    <a href="javascript: void(0);">
                                                         <div class="d-flex">
                                                             <div
                                                                 class="chat-user-img online align-self-center me-3 ms-0">
@@ -163,69 +193,9 @@
                                                         </div>
                                                     </a>
                                                 </li>
-                                                {% endcomment %}
-
-                                                {% comment %}
-                                                <li class="unread">
-                                                    <a href="#">
-                                                        <div class="d-flex">
-                                                            <div class="chat-user-img away align-self-center me-3 ms-0">
-                                                                <img src="{% static 'img/avatar-3.jpg' %}"
-                                                                    class="rounded-circle avatar-xs" alt="" />
-                                                                <span class="user-status"></span>
-                                                            </div>
-                                                            <div class="flex-grow-1 overflow-hidden">
-                                                                <h5 class="text-truncate font-size-15 mb-1">
-                                                                    Mark
-                                                                    Messer
-                                                                </h5>
-                                                                <p class="chat-user-message text-truncate mb-0">
-                                                                    <i class="ri-image-fill align-middle me-1 ms-0"></i>
-                                                                    Images
-                                                                </p>
-                                                            </div>
-                                                            <div class="font-size-11">
-                                                                12 min
-                                                            </div>
-                                                            <div class="unread-message">
-                                                                <span
-                                                                    class="badge badge-soft-danger rounded-pill">02</span>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                {% endcomment %}
-
-                                                <li class="active">
-                                                    <a href="#">
-                                                        <div class="d-flex">
-                                                            <div
-                                                                class="chat-user-img online align-self-center me-3 ms-0">
-                                                                <img src="{% static 'img/avatar-4.jpg' %}"
-                                                                    class="rounded-circle avatar-xs" alt="" />
-                                                                <span class="user-status"></span>
-                                                            </div>
-                                                            <div class="flex-grow-1 overflow-hidden">
-                                                                <h5 class="text-truncate font-size-15 mb-1">
-                                                                    Doris
-                                                                    Brown
-                                                                </h5>
-                                                                <p class="chat-user-message text-truncate mb-0">
-                                                                    Nice
-                                                                    to
-                                                                    meet
-                                                                    you
-                                                                </p>
-                                                            </div>
-                                                            <div class="font-size-11">
-                                                                10:12 AM
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </li>
 
                                                 <li class="typing">
-                                                    <a href="#">
+                                                    <a href="javascript: void(0);">
                                                         <div class="d-flex">
                                                             <div
                                                                 class="chat-user-img align-self-center online me-3 ms-0">
@@ -257,6 +227,36 @@
                                                     </a>
                                                 </li>
 
+                                                <li class="unread">
+                                                    <a href="javascript: void(0);">
+                                                        <div class="d-flex">
+                                                            <div class="chat-user-img away align-self-center me-3 ms-0">
+                                                                <img src="{% static 'img/avatar-3.jpg' %}"
+                                                                    class="rounded-circle avatar-xs" alt="" />
+                                                                <span class="user-status"></span>
+                                                            </div>
+                                                            <div class="flex-grow-1 overflow-hidden">
+                                                                <h5 class="text-truncate font-size-15 mb-1">
+                                                                    Mark
+                                                                    Messer
+                                                                </h5>
+                                                                <p class="chat-user-message text-truncate mb-0">
+                                                                    <i class="ri-image-fill align-middle me-1 ms-0"></i>
+                                                                    Images
+                                                                </p>
+                                                            </div>
+                                                            <div class="font-size-11">
+                                                                12 min
+                                                            </div>
+                                                            <div class="unread-message">
+                                                                <span
+                                                                    class="badge badge-soft-danger rounded-pill">02</span>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                {% endcomment %}
+
                                             </ul>
                                         </div>
                                     </div>
@@ -282,145 +282,163 @@
         </div>
         <!-- end chat-leftsidebar -->
 
+
         <!-- Start User chat -->
         <div class="user-chat w-100 overflow-hidden">
+
             <div class="d-lg-flex">
+
                 <!-- start chat conversation section -->
                 <div class="w-100 overflow-hidden position-relative">
-                    <div class="p-3 p-lg-4 border-bottom user-chat-topbar">
-                        <div class="row align-items-center">
-                            <div class="col-sm-4 col-8">
-                                <div class="d-flex align-items-center">
-                                    <div class="d-block d-lg-none me-2 ms-0">
-                                        <a href="javascript: void(0);"
-                                            class="user-chat-remove text-muted font-size-16 p-2"><i
-                                                class="ri-arrow-left-s-line"></i></a>
-                                    </div>
-                                    <div class="me-3 ms-0">
-                                        <img src="{% static 'img/avatar-4.jpg' %}" class="rounded-circle avatar-xs"
-                                            alt="" />
-                                    </div>
-                                    <div class="flex-grow-1 overflow-hidden">
-                                        <h5 class="font-size-16 mb-0 text-truncate">
-                                            <a href="#" class="text-reset user-profile-show">Doris Brown</a>
-                                            <input type="hidden" id="send-to-user" value={% if user.id == 1 %} "3"
-                                                {% else %} "1" {% endif %} />
-                                            <i
-                                                class="ri-record-circle-fill font-size-10 text-success d-inline-block ms-1"></i>
-                                        </h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-8 col-4">
-                                <ul class="list-inline user-chat-nav text-end mb-0">
-                                    <li class="list-inline-item">
-                                        <div class="dropdown">
-                                            <button class="btn nav-btn dropdown-toggle" type="button"
-                                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="ri-search-line"></i>
-                                            </button>
-                                            <div class="dropdown-menu p-0 dropdown-menu-end dropdown-menu-md">
-                                                <div class="search-box p-2">
-                                                    <input type="text" class="form-control bg-light border-0"
-                                                        placeholder="Search.." />
-                                                </div>
-                                            </div>
+
+                    {% for thread in Threads %}
+
+                    {% if forloop.first %}
+                    <input type="hidden" id="send-to-user"
+                        value="{% if thread.first_person == user %}{{ thread.second_person.id }}{% else %}{{ thread.first_person.id }}{% endif %}" />
+                    {% endif %}
+
+                    <div id="chat-{{ thread.id }}" class="chat-window {% if not forloop.first %}d-none{% endif %}">
+
+                        <!-- start chat user head -->
+                        <div class="p-3 p-lg-4 border-bottom user-chat-topbar">
+                            <div class="row align-items-center">
+                                <div class="col-12 user-profile-show" style="cursor: pointer">
+                                    <div class="d-flex align-items-center">
+                                        <div class="d-block d-lg-none me-2 ms-0">
+                                            <a class="user-chat-remove text-muted font-size-16 p-2"
+                                                href="javascript: void(0);">
+                                                <i class="ri-arrow-left-s-line"></i>
+                                            </a>
                                         </div>
-                                    </li>
-
-                                    <li class="list-inline-item d-none d-lg-inline-block me-2 ms-0">
-                                        <button type="button" class="btn nav-btn" data-bs-toggle="modal"
-                                            data-bs-target="#audiocallModal">
-                                            <i class="ri-phone-line"></i>
-                                        </button>
-                                    </li>
-
-                                    <li class="list-inline-item d-none d-lg-inline-block me-2 ms-0">
-                                        <button type="button" class="btn nav-btn" data-bs-toggle="modal"
-                                            data-bs-target="#videocallModal">
-                                            <i class="ri-vidicon-line"></i>
-                                        </button>
-                                    </li>
-
-                                    <li class="list-inline-item d-none d-lg-inline-block me-2 ms-0">
-                                        <button type="button" class="btn nav-btn user-profile-show">
-                                            <i class="ri-user-2-line"></i>
-                                        </button>
-                                    </li>
-
-                                    <li class="list-inline-item">
-                                        <div class="dropdown">
-                                            <button class="btn nav-btn dropdown-toggle" type="button"
-                                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="ri-more-fill"></i>
-                                            </button>
-                                            <div class="dropdown-menu dropdown-menu-end">
-                                                <a class="dropdown-item d-block d-lg-none user-profile-show"
-                                                    href="#">View profile
-                                                    <i class="ri-user-2-line float-end text-muted"></i></a>
-                                                <a class="dropdown-item d-block d-lg-none" href="#"
-                                                    data-bs-toggle="modal" data-bs-target="#audiocallModal">Audio
-                                                    <i class="ri-phone-line float-end text-muted"></i></a>
-                                                <a class="dropdown-item d-block d-lg-none" href="#"
-                                                    data-bs-toggle="modal" data-bs-target="#videocallModal">Video
-                                                    <i class="ri-vidicon-line float-end text-muted"></i></a>
-                                                <a class="dropdown-item" href="#">Archive
-                                                    <i class="ri-archive-line float-end text-muted"></i></a>
-                                                <a class="dropdown-item" href="#">Muted
-                                                    <i class="ri-volume-mute-line float-end text-muted"></i></a>
-                                                <a class="dropdown-item" href="#">Delete
-                                                    <i class="ri-delete-bin-line float-end text-muted"></i></a>
-                                            </div>
+                                        <div class="me-3 ms-0">
+                                            <img class="rounded-circle avatar-xs"
+                                                src="{% if thread.first_person == user %}{{ thread.second_person.profile.avatar_url }}{% else %}{{ thread.first_person.profile.avatar_url }}{% endif %}"
+                                                alt="{% if thread.first_person == user %}{{ thread.second_person.profile }}{% else %}{{ thread.first_person.profile }}{% endif %}" />
                                         </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end chat user head -->
-
-                    <!-- start chat conversation -->
-                    <div class="chat-conversation p-3 p-lg-4" data-simplebar="init">
-                        <div class="simplebar-wrapper" style="margin: -24px">
-                            <div class="simplebar-height-auto-observer-wrapper">
-                                <div class="simplebar-height-auto-observer"></div>
-                            </div>
-                            <div class="simplebar-mask">
-                                <div class="simplebar-offset" style="right: -17px; bottom: 0px">
-                                    <div id="chat-container" class="simplebar-content-wrapper"
-                                        style="height: 100%;overflow: hidden scroll;">
-                                        <div class="simplebar-content" style="padding: 24px">
-                                            <ul class="list-unstyled mb-0" id="chat-body">
-
-                                                {% comment %}
-                                                <li>
-                                                    <div class="chat-day-title">
-                                                        <span class="title">Today</span>
-                                                    </div>
-                                                </li>
-                                                {% endcomment %}
-
-                                            </ul>
+                                        <div class="flex-grow-1 overflow-hidden">
+                                            <h5 class="font-size-16 mb-0 text-truncate">
+                                                <a href="javascript: void(0);"
+                                                    class="text-reset">{% if thread.first_person == user %}{{ thread.second_person.profile }}{% else %}{{ thread.first_person.profile }}{% endif %}</a>
+                                                <i
+                                                    class="ri-record-circle-fill font-size-10 text-success d-inline-block ms-1"></i>
+                                            </h5>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="simplebar-placeholder" style="width: auto; height: 1153px"></div>
                         </div>
-                        <div class="simplebar-track simplebar-horizontal" style="visibility: hidden">
-                            <div class="simplebar-scrollbar"
-                                style="transform: translate3d(0px, 0px, 0px);display: none;"></div>
+                        <!-- end chat user head -->
+
+                        <!-- start chat conversation -->
+                        <div class="chat-conversation p-3 p-lg-4" data-simplebar="init">
+                            <div class="simplebar-wrapper" style="margin: -24px">
+                                <div class="simplebar-height-auto-observer-wrapper">
+                                    <div class="simplebar-height-auto-observer"></div>
+                                </div>
+                                <div class="simplebar-mask">
+                                    <div class="simplebar-offset" style="right: -17px; bottom: 0px">
+                                        <div id="chat-container-{{ thread.id }}"
+                                            class="chat-container simplebar-content-wrapper"
+                                            style="height: 100%;overflow: hidden scroll;">
+                                            <div class="simplebar-content" style="padding: 24px">
+                                                <ul class="list-unstyled mb-0" id="chat-body-{{ thread.id }}">
+
+                                                    {% for chat in thread.chatmessage_thread.all %}
+
+                                                    <li class="{% if chat.user == user %}right{% endif %}">
+                                                        <div class="conversation-list">
+                                                            <div class="chat-avatar">
+                                                                <img src="{{ chat.user.profile.avatar_url }}"
+                                                                    alt="{{ chat.user.profile }}" />
+                                                            </div>
+                                                            <div class="user-chat-content">
+                                                                <div class="ctext-wrap">
+                                                                    <div class="ctext-wrap-content">
+                                                                        <p class="mb-0">{{ chat.message }}</p>
+                                                                        <p class="chat-time mb-0">
+                                                                            <i class="ri-time-line align-middle"></i>
+                                                                            <span
+                                                                                class="align-middle">{{ chat.created_at|date:"d D" }},
+                                                                                {{ chat.created_at|time:"h:i A" }}</span>
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="dropdown align-self-start">
+                                                                        <a class="dropdown-toggle"
+                                                                            href="javascript: void(0);" role="button"
+                                                                            data-bs-toggle="dropdown"
+                                                                            aria-haspopup="true" aria-expanded="false">
+                                                                            <i class="ri-more-2-fill"></i>
+                                                                        </a>
+                                                                        <div class="dropdown-menu">
+                                                                            <a class="dropdown-item"
+                                                                                href="javascript: void(0);">
+                                                                                Copy
+                                                                                <i
+                                                                                    class="ri-file-copy-line float-end text-muted"></i>
+                                                                            </a>
+                                                                            <a class="dropdown-item"
+                                                                                href="javascript: void(0);">
+                                                                                Save
+                                                                                <i
+                                                                                    class="ri-save-line float-end text-muted"></i>
+                                                                            </a>
+                                                                            <a class="dropdown-item"
+                                                                                href="javascript: void(0);">
+                                                                                Forward
+                                                                                <i
+                                                                                    class="ri-chat-forward-line float-end text-muted"></i>
+                                                                            </a>
+                                                                            <a class="dropdown-item"
+                                                                                href="javascript: void(0);">
+                                                                                Delete
+                                                                                <i
+                                                                                    class="ri-delete-bin-line float-end text-muted"></i>
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="conversation-name">
+                                                                    {% if chat.user == user %}You{% else %}{{ chat.user.profile }}{% endif %}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+
+                                                    {% endfor %}
+
+                                                    {% comment %}
+                                                    <li>
+                                                        <div class="chat-day-title">
+                                                            <span class="title">Today</span>
+                                                        </div>
+                                                    </li>
+                                                    {% endcomment %}
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="simplebar-placeholder" style="width: auto; height: 1153px"></div>
+                            </div>
+                            <div class="simplebar-track simplebar-horizontal" style="visibility: hidden">
+                                <div class="simplebar-scrollbar"
+                                    style="transform: translate3d(0px, 0px, 0px);display: none;"></div>
+                            </div>
+                            <div class="simplebar-track simplebar-vertical" style="visibility: visible">
+                                <div class="simplebar-scrollbar"
+                                    style="height: 127px;transform: translate3d(0px, 257px, 0px);display: block;"></div>
+                            </div>
                         </div>
-                        <div class="simplebar-track simplebar-vertical" style="visibility: visible">
-                            <div class="simplebar-scrollbar"
-                                style="height: 127px;transform: translate3d(0px, 257px, 0px);display: block;"></div>
-                        </div>
+                        <!-- end chat conversation end -->
+
                     </div>
-                    <!-- end chat conversation end -->
+
+                    {% endfor %}
 
                     <!-- start chat input section -->
                     <div class="chat-input-section p-3 p-lg-4 border-top mb-0">
-
                         <form action="#" method="POST" id="send-message-form">
                             <div class="row g-0">
                                 <div class="col">
@@ -458,11 +476,12 @@
 
                     </div>
                     <!-- end chat input section -->
+
                 </div>
                 <!-- end chat conversation section -->
 
                 <!-- start User profile detail sidebar -->
-                <div class="user-profile-sidebar">
+                <div class="user-profile-sidebar d-none" id="user-profile">
                     <div class="px-3 px-lg-4 pt-3 pt-lg-4">
                         <div class="user-chat-nav text-end">
                             <button type="button" class="btn nav-btn" id="user-profile-hide">
@@ -473,13 +492,10 @@
 
                     <div class="text-center p-4 border-bottom">
                         <div class="mb-4">
-                            <img src="{{ user.profile.avatar_url }}" class="rounded-circle avatar-lg img-thumbnail"
-                                alt="" />
+                            <img src="" class="user-profile-avatar rounded-circle avatar-lg img-thumbnail" alt="" />
                         </div>
 
-                        <h5 class="font-size-16 mb-1 text-truncate">
-                            Doris Brown
-                        </h5>
+                        <h5 class="user-profile-name font-size-16 mb-1 text-truncate"></h5>
                         <p class="text-muted text-truncate mb-1">
                             <i class="ri-record-circle-fill font-size-10 text-success me-1 ms-0"></i>
                             Active
@@ -487,7 +503,6 @@
                     </div>
                     <!-- End profile user -->
 
-                    {% comment %}
                     <!-- Start user-profile-desc -->
                     <div class="p-4 user-profile-desc" data-simplebar="init">
                         <div class="simplebar-wrapper" style="margin: -24px">
@@ -499,300 +514,7 @@
                                     <div class="simplebar-content-wrapper" style="height: auto;overflow: hidden;">
                                         <div class="simplebar-content" style="padding: 24px">
                                             <div class="text-muted">
-                                                <p class="mb-4">
-                                                    If several languages
-                                                    coalesce, the grammar of
-                                                    the resulting language
-                                                    is more simple and
-                                                    regular than that of the
-                                                    individual.
-                                                </p>
-                                            </div>
-
-                                            <div class="accordion" id="myprofile">
-                                                <div class="accordion-item card border mb-2">
-                                                    <div class="accordion-header" id="about3">
-                                                        <button class="accordion-button" type="button"
-                                                            data-bs-toggle="collapse" data-bs-target="#aboutprofile"
-                                                            aria-expanded="true" aria-controls="aboutprofile">
-                                                            <h5 class="font-size-14 m-0">
-                                                                <i
-                                                                    class="ri-user-2-line me-2 ms-0 align-middle d-inline-block"></i>
-                                                                About
-                                                            </h5>
-                                                        </button>
-                                                    </div>
-                                                    <div id="aboutprofile" class="accordion-collapse collapse show"
-                                                        aria-labelledby="about3" data-bs-parent="#myprofile">
-                                                        <div class="accordion-body">
-                                                            <div>
-                                                                <p class="text-muted mb-1">
-                                                                    Name
-                                                                </p>
-                                                                <h5 class="font-size-14">
-                                                                    Doris
-                                                                    Brown
-                                                                </h5>
-                                                            </div>
-
-                                                            <div class="mt-4">
-                                                                <p class="text-muted mb-1">
-                                                                    Email
-                                                                </p>
-                                                                <h5 class="font-size-14">
-                                                                    adc@123.com
-                                                                </h5>
-                                                            </div>
-
-                                                            <div class="mt-4">
-                                                                <p class="text-muted mb-1">
-                                                                    Time
-                                                                </p>
-                                                                <h5 class="font-size-14">
-                                                                    11:40 AM
-                                                                </h5>
-                                                            </div>
-
-                                                            <div class="mt-4">
-                                                                <p class="text-muted mb-1">
-                                                                    Location
-                                                                </p>
-                                                                <h5 class="font-size-14 mb-0">
-                                                                    California,
-                                                                    USA
-                                                                </h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="accordion-item card border">
-                                                    <div class="accordion-header" id="attachfile3">
-                                                        <button class="accordion-button collapsed" type="button"
-                                                            data-bs-toggle="collapse" data-bs-target="#attachprofile"
-                                                            aria-expanded="false" aria-controls="attachprofile">
-                                                            <h5 class="font-size-14 m-0">
-                                                                <i
-                                                                    class="ri-attachment-line me-2 ms-0 align-middle d-inline-block"></i>
-                                                                Attached
-                                                                Files
-                                                            </h5>
-                                                        </button>
-                                                    </div>
-                                                    <div id="attachprofile" class="accordion-collapse collapse"
-                                                        aria-labelledby="attachfile3" data-bs-parent="#myprofile">
-                                                        <div class="accordion-body">
-                                                            <div class="card p-2 border mb-2">
-                                                                <div class="d-flex align-items-center">
-                                                                    <div class="avatar-sm me-3 ms-0">
-                                                                        <div
-                                                                            class="avatar-title bg-soft-primary text-primary rounded font-size-20">
-                                                                            <i class="ri-file-text-fill"></i>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="flex-grow-1">
-                                                                        <div class="text-start">
-                                                                            <h5 class="font-size-14 mb-1">
-                                                                                admin_v1.0.zip
-                                                                            </h5>
-                                                                            <p class="text-muted font-size-13 mb-0">
-                                                                                12.5
-                                                                                MB
-                                                                            </p>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="ms-4 me-0">
-                                                                        <ul class="list-inline mb-0 font-size-18">
-                                                                            <li class="list-inline-item">
-                                                                                <a href="#" class="text-muted px-1">
-                                                                                    <i class="ri-download-2-line"></i>
-                                                                                </a>
-                                                                            </li>
-                                                                            <li class="list-inline-item dropdown">
-                                                                                <a class="dropdown-toggle text-muted px-1"
-                                                                                    href="#" role="button"
-                                                                                    data-bs-toggle="dropdown"
-                                                                                    aria-haspopup="true"
-                                                                                    aria-expanded="false">
-                                                                                    <i class="ri-more-fill"></i>
-                                                                                </a>
-                                                                                <div
-                                                                                    class="dropdown-menu dropdown-menu-end">
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">Action</a>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">Another
-                                                                                        action</a>
-                                                                                    <div class="dropdown-divider"></div>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">Delete</a>
-                                                                                </div>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="card p-2 border mb-2">
-                                                                <div class="d-flex align-items-center">
-                                                                    <div class="avatar-sm me-3 ms-0">
-                                                                        <div
-                                                                            class="avatar-title bg-soft-primary text-primary rounded font-size-20">
-                                                                            <i class="ri-image-fill"></i>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="flex-grow-1">
-                                                                        <div class="text-start">
-                                                                            <h5 class="font-size-14 mb-1">
-                                                                                Image-1.jpg
-                                                                            </h5>
-                                                                            <p class="text-muted font-size-13 mb-0">
-                                                                                4.2
-                                                                                MB
-                                                                            </p>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="ms-4 me-0">
-                                                                        <ul class="list-inline mb-0 font-size-18">
-                                                                            <li class="list-inline-item">
-                                                                                <a href="#" class="text-muted px-1">
-                                                                                    <i class="ri-download-2-line"></i>
-                                                                                </a>
-                                                                            </li>
-                                                                            <li class="list-inline-item dropdown">
-                                                                                <a class="dropdown-toggle text-muted px-1"
-                                                                                    href="#" role="button"
-                                                                                    data-bs-toggle="dropdown"
-                                                                                    aria-haspopup="true"
-                                                                                    aria-expanded="false">
-                                                                                    <i class="ri-more-fill"></i>
-                                                                                </a>
-                                                                                <div
-                                                                                    class="dropdown-menu dropdown-menu-end">
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">Action</a>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">Another
-                                                                                        action</a>
-                                                                                    <div class="dropdown-divider"></div>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">Delete</a>
-                                                                                </div>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="card p-2 border mb-2">
-                                                                <div class="d-flex align-items-center">
-                                                                    <div class="avatar-sm me-3 ms-0">
-                                                                        <div
-                                                                            class="avatar-title bg-soft-primary text-primary rounded font-size-20">
-                                                                            <i class="ri-image-fill"></i>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="flex-grow-1">
-                                                                        <div class="text-start">
-                                                                            <h5 class="font-size-14 mb-1">
-                                                                                Image-2.jpg
-                                                                            </h5>
-                                                                            <p class="text-muted font-size-13 mb-0">
-                                                                                3.1
-                                                                                MB
-                                                                            </p>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="ms-4 me-0">
-                                                                        <ul class="list-inline mb-0 font-size-18">
-                                                                            <li class="list-inline-item">
-                                                                                <a href="#" class="text-muted px-1">
-                                                                                    <i class="ri-download-2-line"></i>
-                                                                                </a>
-                                                                            </li>
-                                                                            <li class="list-inline-item dropdown">
-                                                                                <a class="dropdown-toggle text-muted px-1"
-                                                                                    href="#" role="button"
-                                                                                    data-bs-toggle="dropdown"
-                                                                                    aria-haspopup="true"
-                                                                                    aria-expanded="false">
-                                                                                    <i class="ri-more-fill"></i>
-                                                                                </a>
-                                                                                <div
-                                                                                    class="dropdown-menu dropdown-menu-end">
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">Action</a>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">Another
-                                                                                        action</a>
-                                                                                    <div class="dropdown-divider"></div>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">Delete</a>
-                                                                                </div>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="card p-2 border mb-2">
-                                                                <div class="d-flex align-items-center">
-                                                                    <div class="avatar-sm me-3 ms-0">
-                                                                        <div
-                                                                            class="avatar-title bg-soft-primary text-primary rounded font-size-20">
-                                                                            <i class="ri-file-text-fill"></i>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="flex-grow-1">
-                                                                        <div class="text-start">
-                                                                            <h5 class="font-size-14 mb-1">
-                                                                                Landing-A.zip
-                                                                            </h5>
-                                                                            <p class="text-muted font-size-13 mb-0">
-                                                                                6.7
-                                                                                MB
-                                                                            </p>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="ms-4 me-0">
-                                                                        <ul class="list-inline mb-0 font-size-18">
-                                                                            <li class="list-inline-item">
-                                                                                <a href="#" class="text-muted px-1">
-                                                                                    <i class="ri-download-2-line"></i>
-                                                                                </a>
-                                                                            </li>
-                                                                            <li class="list-inline-item dropdown">
-                                                                                <a class="dropdown-toggle text-muted px-1"
-                                                                                    href="#" role="button"
-                                                                                    data-bs-toggle="dropdown"
-                                                                                    aria-haspopup="true"
-                                                                                    aria-expanded="false">
-                                                                                    <i class="ri-more-fill"></i>
-                                                                                </a>
-                                                                                <div
-                                                                                    class="dropdown-menu dropdown-menu-end">
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">Action</a>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">Another
-                                                                                        action</a>
-                                                                                    <div class="dropdown-divider"></div>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">Delete</a>
-                                                                                </div>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- end profile-user-accordion -->
+                                                <p class="mb-4 user-profile-bio"></p>
                                             </div>
                                             <!-- end user-profile-desc -->
                                         </div>
@@ -811,93 +533,12 @@
                         </div>
                     </div>
                     <!-- end User profile detail sidebar -->
-                    {% endcomment %}
 
                 </div>
+
             </div>
             <!-- End User chat -->
 
-            <!-- audiocall Modal -->
-            <div class="modal fade" id="audiocallModal" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <div class="text-center p-4">
-                                <div class="avatar-lg mx-auto mb-4">
-                                    <img src="{% static 'img/avatar-4.jpg' %}" alt=""
-                                        class="img-thumbnail rounded-circle" />
-                                </div>
-
-                                <h5 class="text-truncate">Doris Brown</h5>
-                                <p class="text-muted">Start Audio Call</p>
-
-                                <div class="mt-5">
-                                    <ul class="list-inline mb-1">
-                                        <li class="list-inline-item px-2 me-2 ms-0">
-                                            <button type="button" class="btn btn-danger avatar-sm rounded-circle"
-                                                data-bs-dismiss="modal">
-                                                <span class="avatar-title bg-transparent font-size-20">
-                                                    <i class="ri-close-fill"></i>
-                                                </span>
-                                            </button>
-                                        </li>
-                                        <li class="list-inline-item px-2">
-                                            <button type="button" class="btn btn-success avatar-sm rounded-circle">
-                                                <span class="avatar-title bg-transparent font-size-20">
-                                                    <i class="ri-phone-fill"></i>
-                                                </span>
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- audiocall Modal -->
-
-            <!-- videocall Modal -->
-            <div class="modal fade" id="videocallModal" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <div class="text-center p-4">
-                                <div class="avatar-lg mx-auto mb-4">
-                                    <img src="{% static 'img/avatar-4.jpg' %}" alt=""
-                                        class="img-thumbnail rounded-circle" />
-                                </div>
-
-                                <h5 class="text-truncate">Doris Brown</h5>
-                                <p class="text-muted mb-0">
-                                    Start Video Call
-                                </p>
-
-                                <div class="mt-5">
-                                    <ul class="list-inline mb-1">
-                                        <li class="list-inline-item px-2 me-2 ms-0">
-                                            <button type="button" class="btn btn-danger avatar-sm rounded-circle"
-                                                data-bs-dismiss="modal">
-                                                <span class="avatar-title bg-transparent font-size-20">
-                                                    <i class="ri-close-fill"></i>
-                                                </span>
-                                            </button>
-                                        </li>
-                                        <li class="list-inline-item px-2">
-                                            <button type="button" class="btn btn-success avatar-sm rounded-circle">
-                                                <span class="avatar-title bg-transparent font-size-20">
-                                                    <i class="ri-vidicon-fill"></i>
-                                                </span>
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- end modal -->
         </div>
         <!-- end  layout wrapper -->
 
